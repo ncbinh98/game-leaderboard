@@ -1,6 +1,16 @@
 # Game Leaderboard v1 (270226)
 
-Note: This source code was initialized from one of my previous NestJS template repositories created for personal use, which you can check out here: https://github.com/ncbinh98/nestjs-boilerplate-light
+> **Note:** This source code was initialized from one of my previous NestJS template repositories created for personal use, which you can check out here: https://github.com/ncbinh98/nestjs-boilerplate-light
+
+### **Core Features:**
+
+- Submit score
+- Get ranked leaderboard
+
+### **Core Entities:**
+
+- **Users**: Users table to store user information.(id, username, email, password, createdAt, updatedAt)
+- **Scores**: Scores table to store score information.(id, userId, scoreValue, metaData, createdAt)
 
 ### **Pros:**
 
@@ -19,7 +29,7 @@ Note: This source code was initialized from one of my previous NestJS template r
 - **Expand Database Schema:** Create a `leaderboards` table (to support multiple leaderboards per game, such as weekly or mode-specific rankings) and a `leaderboard_best_scores` table to store a user's highest score for a specific leaderboard.
 - **Refactor Score Management:** Add a `leaderboardId` field to the `scores` table; the `scores` table will serve as the **Source of Truth**, where records are **append-only** (no updates) and subsequently **fanned out** to the corresponding leaderboards.
 
-# 🕹️ API Examples (Functional Requirements)
+## API Examples (Functional Requirements)
 
 ### 1. Record a Score
 
