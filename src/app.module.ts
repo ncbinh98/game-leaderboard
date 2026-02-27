@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from './infra/redis/redis.module';
 import { redisConfig } from './config/redis.config';
+import { ScoresModule } from './modules/scores/scores.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { redisConfig } from './config/redis.config';
     UtilsModule,
     UsersModule,
     AuthModule,
+    ScoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],

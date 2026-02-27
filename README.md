@@ -1,109 +1,75 @@
-# NestJS Boilerplate Light
+# Game Leaderboard v1 (270226)
 
-A lightweight, production-ready NestJS boilerplate featuring JWT authentication, user management, and TypeORM integration.
+Note: This source code was initialized from one of my previous NestJS template repositories created for personal use, which you can check out here: https://github.com/ncbinh98/nestjs-boilerplate-light
 
-## 🚀 Features
+### **Pros:**
 
-- **Auth & Security**: JWT-based authentication with `passport-jwt`.
-- **User Management**: Complete CRUD operations for user profiles.
-- **Database**: TypeORM integration with PostgreSQL support.
-- **Migrations**: Automated database schema management and versioning.
-- **Architecture**: Clean, modular architecture following NestJS best practices.
-- **Validation**: Strict input validation using `class-validator` and `class-transformer`.
-- **Configuration**: Environment-based configuration via `@nestjs/config`.
-- **Cache & Storage**: Global Redis integration using `ioredis`.
+- **Simplicity & Functionality:** A basic and straightforward version for inserting and retrieving leaderboard data, ensuring all functional requirements are met.
+- **Minimal Complexity:** The module consists only of `scores` and `users`, making it ideal for small datasets, fast startup, and MVP (Minimum Viable Product) development.
 
-## 🛠️ Tech Stack
+### **Cons:**
 
-- **Framework**: [NestJS](https://nestjs.com/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **ORM**: [TypeORM](https://typeorm.io/)
-- **Database**: [PostgreSQL](https://www.postgresql.org/)
-- **Auth**: [Passport.js](https://www.passportjs.org/) (JWT)
-- **Cache**: [ioredis](https://github.com/redis/ioredis)
+- **Scalability Issues:** Unable to handle large datasets or provide low-latency leaderboard queries, as it requires scanning the entire `scores` table to calculate rankings.
+- **Performance Bottleneck:** If 1M users attempt to retrieve their rank simultaneously, the database will likely hang.
+- **Write Latency:** With high-frequency score updates and a large user base, the database will become a write bottleneck, significantly slowing down performance.
 
-## 📦 Quick Start
+### For the next version, I will implement the following:
 
-### 1. Installation
+- **Utilize Redis Sorted Sets (ZSET):** To store live rankings and enable faster user rank queries.
+- **Expand Database Schema:** Create a `leaderboards` table (to support multiple leaderboards per game, such as weekly or mode-specific rankings) and a `leaderboard_best_scores` table to store a user's highest score for a specific leaderboard.
+- **Refactor Score Management:** Add a `leaderboardId` field to the `scores` table; the `scores` table will serve as the **Source of Truth**, where records are **append-only** (no updates) and subsequently **fanned out** to the corresponding leaderboards.
 
-```bash
-npm install
-```
+# 🕹️ API Examples (Functional Requirements)
 
-### 2. Configuration
+### 1. Record a Score
 
-Copy the example environment file and update your database credentials:
+**Endpoint**: `POST /scores`
 
-```bash
-cp .env-example.txt .env
-```
+**Request Body**:
 
-### 3. Database Migrations
-
-Run migrations to set up your database schema:
-
-```bash
-npm run migration:run
-```
-
-### 4. Running the App
-
-```bash
-# development
-npm run start:dev
-
-# production mode
-npm run start:prod
-```
-
-## 📜 Available Scripts
-
-| Script                                   | Description                                      |
-| ---------------------------------------- | ------------------------------------------------ |
-| `npm run start:dev`                      | Start the application in watch mode              |
-| `npm run build`                          | Build the application for production             |
-| `npm run lint`                           | Run ESLint to check for code style issues        |
-| `npm run test`                           | Run unit tests                                   |
-| `npm run test:e2e`                       | Run end-to-end tests                             |
-| `npm run migration:generate --name=Name` | Generate a new migration based on entity changes |
-| `npm run migration:run`                  | Execute pending migrations                       |
-| `npm run migration:revert`               | Revert the last executed migration               |
-
-## ⚙️ Environment Variables
-
-| Variable         | Description                | Default     |
-| ---------------- | -------------------------- | ----------- |
-| `DB_HOST`        | Database host              | `localhost` |
-| `DB_PORT`        | Database port              | `5432`      |
-| `DB_USERNAME`    | Database user              | -           |
-| `DB_PASSWORD`    | Database password          | -           |
-| `DB_NAME`        | Database name              | -           |
-| `JWT_SECRET`     | Secret key for JWT signing | -           |
-| `REDIS_HOST`     | Redis host                 | `localhost` |
-| `REDIS_PORT`     | Redis port                 | `6379`      |
-| `REDIS_PASSWORD` | Redis password             | -           |
-| `REDIS_DB`       | Redis database index       | `0`         |
-
-## 📦 Using Redis
-
-Inject the `REDIS_CLIENT` anywhere in your application:
-
-```typescript
-import { Inject, Injectable } from '@nestjs/common';
-import Redis from 'ioredis';
-import { REDIS_CLIENT } from 'src/infra/redis/redis.module';
-
-@Injectable()
-export class MyService {
-  constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis) {}
-
-  async someMethod() {
-    await this.redis.set('key', 'value');
-    const val = await this.redis.get('key');
-  }
+```json
+{
+  "userId": "d7b2a1a0-e8f0-4c3e-9b1a-1a2b3c4d5e6f",
+  "scoreValue": 100
 }
 ```
 
-## 📄 License
+**Response**:
 
-This project is [MIT licensed](https://opensource.org/licenses/MIT).
+```json
+{
+  "userId": "d7b2a1a0-e8f0-4c3e-9b1a-1a2b3c4d5e6f",
+  "scoreValue": 100,
+  "id": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+  "createdAt": "2026-02-27T20:30:00.000Z"
+}
+```
+
+### 2. Get Ranked Leaderboard
+
+**Endpoint**: `GET /scores/ranked`
+
+**Response**:
+
+```json
+[
+  {
+    "id": "a96efdf6-6b0c-4842-b7f8-23081e2a3ce5",
+    "userId": "857e9dcf-6d5b-4c94-bc22-dfc3ed355100",
+    "scoreValue": 100,
+    "metaData": null,
+    "createdAt": "2026-02-27T13:20:38.141Z",
+    "rank": 1
+  },
+  {
+    "id": "24983be0-609a-4753-a674-b724916858be",
+    "userId": "f40dfcaf-0de7-425f-bd22-b16966b0aec1",
+    "scoreValue": 90,
+    "metaData": null,
+    "createdAt": "2026-02-27T13:21:53.147Z",
+    "rank": 2
+  }
+]
+```
+
+---
