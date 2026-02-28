@@ -12,6 +12,10 @@
 - **Users**: Users table to store user information.(id, username, email, password, createdAt, updatedAt)
 - **Scores**: Scores table to store score information.(id, userId, scoreValue, metaData, createdAt)
 
+### **High-Level Architecture:**
+
+![alt v1](https://i.ibb.co/Z65qvqMQ/Untitled-Diagram-drawio-1.png 'V1 Architecture')
+
 ### **Pros:**
 
 - **Simplicity & Functionality:** A basic and straightforward version for inserting and retrieving leaderboard data, ensuring all functional requirements are met.
