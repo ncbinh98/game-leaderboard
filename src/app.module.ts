@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -14,6 +14,7 @@ import { ScoresModule } from './modules/scores/scores.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LeaderboardsModule } from './modules/leaderboards/leaderboards.module';
+import { LoggerMiddleware } from './infra/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -44,4 +45,8 @@ import { LeaderboardsModule } from './modules/leaderboards/leaderboards.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

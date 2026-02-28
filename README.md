@@ -55,6 +55,40 @@ In the second version, the system was re-architected into a high-performance hyb
 | **Write Flow**    | Synchronous DB Updates         | Buffering via BullMQ Jobs | **Reduced API Latency** by 95%+.  |
 | **Data Fetching** | Heavy SQL JOINs                | Direct Redis Key Access   | **Constant Time** data retrieval. |
 
+#### **Load Testing Results (k6)**
+
+The system was tested with **1,000 Concurrent Users (VUs)** attempting to create scores simultaneously over a 30-second duration.
+
+- **Success Rate**: 99.55% (195,822 successful checks)
+- **Throughput**: ~6,492 requests per second (RPS)
+- **Latency (p95)**: 130.72ms
+- **Total Requests**: 196,687
+
+```text
+  █ TOTAL RESULTS
+
+    checks_total.......: 196688 6492.800408/s
+    checks_succeeded...: 99.55% 195822 out of 196688
+    checks_failed......: 0.44%  866 out of 196688
+
+    ✓ login status is 200 or 201
+    ✓ has access token
+    ✗ score created successfully
+      ↳  99% — ✓ 195820 / ✗ 866
+
+    HTTP
+    http_req_duration..............: avg=107.6ms  min=0s     med=96.58ms max=8.04s  p(90)=127.78ms p(95)=130.72ms
+      { expected_response:true }...: avg=108.08ms min=8.8ms  med=96.77ms max=8.04s  p(90)=127.81ms p(95)=130.75ms
+    http_req_failed................: 0.44%  866 out of 196687
+    http_reqs......................: 196687 6492.767398/s
+
+    EXECUTION
+    iteration_duration.............: avg=152.93ms min=8.85ms med=97.16ms max=13.91s p(90)=128.02ms p(95)=131.91ms
+    iterations.....................: 196686 6492.734387/s
+    vus............................: 1000   min=1000          max=1000
+    vus_max........................: 1000   min=1000          max=1000
+```
+
 #### **Unsolved Issues (Future Discussion)**
 
 - **Anti-Cheat Logic**: Fraud detection and anti-cheat mechanisms have not yet been implemented to ensure score integrity. Currently trust-based; needs validation layer.
