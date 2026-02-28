@@ -1,6 +1,6 @@
-# Game Leaderboard v2 (2026-02-28)
+# Game Leaderboard v2 (280226)
 
-A high-performance, asynchronous leaderboard system designed for extreme scale and low-latency ranking.
+> **Note:** This source code was initialized from one of my previous NestJS template repositories created for personal use, which you can check out here: https://github.com/ncbinh98/nestjs-boilerplate-light
 
 ---
 
