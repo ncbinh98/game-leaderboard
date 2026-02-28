@@ -63,8 +63,8 @@ The system follows an event-driven, hybrid architecture combining PostgreSQL's r
 
 ### 2. Get Real-time Rankings
 
-**Endpoint**: `GET /scores/ranked?top=10&leaderboardId=uuid-here`  
-**Description**: Fetches the top 10 players for a specific leaderboard context.
+**Endpoint**: `GET /scores/ranked?topStart=1&topEnd=100&leaderboardId=uuid-here`  
+**Description**: Fetches the top 100 players for a specific leaderboard context.
 
 ```json
 [
