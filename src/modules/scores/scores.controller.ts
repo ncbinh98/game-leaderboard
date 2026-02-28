@@ -22,12 +22,17 @@ export class ScoresController {
   @Get('ranked')
   getLeaderboardWithRank(
     @Query('leaderboardId') leaderboardId: string,
-    @Query('top') top: string,
+    @Query('topStart') topStart: string,
+    @Query('topEnd') topEnd: string,
   ) {
     if (!leaderboardId) {
       // For now requirement might need a default or error
       throw new BadRequestException('leaderboardId is required');
     }
-    return this.scoresService.getLeaderboardWithRank(leaderboardId, top);
+    return this.scoresService.getLeaderboardWithRank(
+      leaderboardId,
+      topStart,
+      topEnd,
+    );
   }
 }
