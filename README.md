@@ -57,7 +57,8 @@ In the second version, the system was re-architected into a high-performance hyb
 
 #### **Load Testing Results (k6)**
 
-[Record Load Testing K6](https://www.youtube.com/watch?v=QtJc7LzQhxw)
+[Record Youtube Load Testing K6](https://www.youtube.com/watch?v=QtJc7LzQhxw)
+
 The system was tested with **1,000 Concurrent Users (VUs)** attempting to create scores simultaneously over a 30-second duration.
 
 - **Success Rate**: 99.55% (195,822 successful checks)
