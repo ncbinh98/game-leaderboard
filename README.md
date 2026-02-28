@@ -8,7 +8,7 @@ A highly scalable leaderboard system built with NestJS, evolution-driven develop
 
 ### Phase 1: Foundation (v1) - 2026-02-27
 
-**Status**: [Completed - link <-](https://github.com/ncbinh98/game-leaderboard/tree/lb/v1)
+**Status**: [Completed|Click to view more details](https://github.com/ncbinh98/game-leaderboard/tree/lb/v1)
 
 In the first version, I focused on building a minimum viable product (MVP) to handle score submissions and basic ranking.
 
