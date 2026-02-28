@@ -26,21 +26,24 @@ export class ScoresService {
 
   async getLeaderboardWithRank(
     leaderboardId: string,
-    top: string,
+    topStart: string = '1',
+    topEnd: string = '100',
   ): Promise<any[]> {
     const redisKey = `lb:${leaderboardId}`;
     const topScores = await this.redis.zrevrange(
       redisKey,
-      0,
-      +top - 1,
+      +topStart - 1,
+      +topEnd - 1,
       'WITHSCORES',
     );
 
     const results: any[] = [];
+    let countRank = +topStart;
     for (let i = 0; i < topScores.length; i += 2) {
       const userId = topScores[i];
       const score = parseInt(topScores[i + 1] || '0', 10);
-      const rank = i / 2 + 1;
+      const rank = countRank;
+      countRank++;
 
       const userName =
         (await this.redis.get(`user:${userId}:name`)) || 'Anonymous';
