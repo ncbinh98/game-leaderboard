@@ -6,6 +6,7 @@ import {
   IsString,
   IsUUID,
   Min,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateScoreDto {
@@ -13,11 +14,11 @@ export class CreateScoreDto {
   @IsNotEmpty()
   userId: string;
 
-  @IsInt()
+  @IsNumber()
+  @IsNotEmpty()
   @Min(0)
   scoreValue: number;
 
-  @IsObject()
   @IsOptional()
-  metaData?: Record<string, any>;
+  metaData?: any;
 }
